@@ -47,15 +47,22 @@ class Puzzle(): # Used to create puzzles from files stored with the program, or 
                 self.__Grid.append(C) #Not 2D list, so just puts all in. Assuming list splicing to take rows/columns.
             self.__AllowedPatterns = []  # Holds Pattern() objects that are created below
             self.__AllowedSymbols = []  # Holds letters, shown below (Q, X, T)
-            QPattern = Pattern("Q", "QQ**Q**QQ")  # TODO Hasnu: understand purpose of the *, **
+            # TASK 4.1 START (Modifying Puzzle constructor to assign random limit for patterns)
+            QPattern = Pattern("Q", "QQ**Q**QQ", random.randrange(1,4))  # TODO Hasnu: understand purpose of the *, **
             self.__AllowedPatterns.append(QPattern)
             self.__AllowedSymbols.append("Q")
-            XPattern = Pattern("X", "X*X*X*X*X")
+            XPattern = Pattern("X", "X*X*X*X*X", random.randrange(1,4))
             self.__AllowedPatterns.append(XPattern)
             self.__AllowedSymbols.append("X")
-            TPattern = Pattern("T", "TTT**T**T")
+            TPattern = Pattern("T", "TTT**T**T", random.randrange(1,4))
             self.__AllowedPatterns.append(TPattern)
             self.__AllowedSymbols.append("T")
+            # TASK 1 START (Adding new pattern)
+            CPattern = Pattern("C", "CCC*CCCC*", random.randrange(1,4))
+            self.__AllowedPatterns.append(CPattern)
+            self.__AllowedSymbols.append("C")
+            # TASK 1 END
+            # TASK 4.1 END
 
     def __LoadPuzzle(self, Filename):
         try:
@@ -90,6 +97,11 @@ class Puzzle(): # Used to create puzzles from files stored with the program, or 
         while not Finished: #not False equates to True
             self.DisplayPuzzle() #method to show puzzle. Occurs at the start of each turn/round
             print("Current score: " + str(self.__Score)) #string manipulation, using Score attribute.
+            # TASK 4.3 START (Outputting pattern counts)
+
+            for P in self.__AllowedPatterns:
+                P.OutputPatternCount()
+            # TASK 4.3 END
             #TODO Hasnu: check the purpose behind using underscores in the attributes and methods for the classes
             Row = -1 #starter value, gets changed in the below loop
             Valid = False
@@ -198,13 +210,30 @@ class Puzzle(): # Used to create puzzles from files stored with the program, or 
                 print(self.__CreateHorizontalLine())  # Row separator line
 
 class Pattern():  # Used in __init__ for Puzzle()
-    def __init__(self, SymbolToUse, PatternString):
+    def __init__(self, SymbolToUse, PatternString, *args):
         self.__Symbol = SymbolToUse  # Default is Q, X, T
         self.__PatternSequence = PatternString  # Default is "QQ**Q**QQ", "X*X*X*X*X", "TTT**T**T"
+        # TASK 4.2 START (Adding usage of additional parameter)
+        if len(args) == 1:
+            self.__PatternCount = args[0]
+        else:
+            self.__PatternCount = -1
+    # TASK 4.2 END
 
+    # TASK 4.3 START (adding method to output limit of each pattern)
+    def OutputPatternCount(self):
+        if self.__PatternCount == -1:
+            return
+        elif self.__PatternCount == 0:
+            print(f'{self.__Symbol} has no remaining patterns available.\n{self.__Symbol} can be placed into the grid, but it will not be matched against a pattern')
+        else:
+            print(f'{self.__PatternCount} patterns for {self.__Symbol} remain available')
+    # TASK 4.3 END
 
     def MatchesPattern(self, PatternString, SymbolPlaced):  # Pattern object holds __Symbol as SymbolToUse
-        if SymbolPlaced != self.__Symbol:  # Checking if symbol placed is the same symbol that's used for this pattern
+        # TASK 4.2 START (Decrementing PatternCount and verifying the pattern is usable)
+        if SymbolPlaced != self.__Symbol or self.__PatternCount == 0:  # Checking if symbol placed is the same symbol that's used for this pattern
+        # TASK 4.2 END
             return False  # Tells you "no this isn't the right pattern" and method ends here
         for Count in range(0, len(self.__PatternSequence)):  # PatternSequence is the correct pattern string
             try:
@@ -213,6 +242,9 @@ class Pattern():  # Used in __init__ for Puzzle()
                     return False
             except Exception as ex:  # General catch-all. Exception can be any error type, then formats in the string
                 print(f"EXCEPTION in MatchesPattern: {ex}")
+        if self.__PatternCount > 0:
+            self.__PatternCount -= 1
+            print(f'A {self.__Symbol} pattern has been used. {self.__PatternCount} remain available')
         return True
 
     def GetPatternSequence(self):  # This isn't being used anywhere which is weird
