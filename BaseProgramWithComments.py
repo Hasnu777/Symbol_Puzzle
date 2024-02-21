@@ -111,8 +111,6 @@ class Puzzle(): # Used to create puzzles from files stored with the program, or 
             self.__SymbolsLeft -= 1 #finite size for symbol pool, symbol usage occurs so num. of symbols decreases by 1
             CurrentCell = self.__GetCell(Row, Column) #checks with puzzle to see what's inside the user's chosen cell
             if CurrentCell.CheckSymbolAllowed(Symbol): #method to check if the symbol can be used/put in the cell
-                #TODO Hasnu: double-check and see if comment is accurate
-                #TODO Hasnu: see how to improve this method, since it only checks for blocked cells (@) right now
                 CurrentCell.ChangeSymbolInCell(Symbol) #replaces whatever's in the cell (empty/space/another symbol)
                 AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column) #Checking if a pattern has been created
                 if AmountToAddToScore > 0:
@@ -128,11 +126,9 @@ class Puzzle(): # Used to create puzzles from files stored with the program, or 
         Index = (self.__GridSize - Row) * self.__GridSize + Column - 1
         # Rows in the default puzzle goes from 8 at the top to 1 at the bottom (same principle for puzzle files)
         # This is why the GridSize-Row thing is being done, to access the grid properly
-        # Column increases left to right, so they just do -1 because its a zero-indexed array
-        if Index >= 0: #if negative number's been input by user
-            return self.__Grid[Index]
-        #TODO Hasnu: check Grid being 1D, and see structure of array and verify if its just individual cell entries
-        # This would probably be why they're multiplying the row and column value, but you have to check this
+        # Column increases left to right, so they just do -1 because it is a zero-indexed array
+        if Index >= 0:  # if negative number's been input by user
+            return self.__Grid[Index]  # Grid is a 1D array, Cell() objects are mashed in next to each other
         else:
             raise IndexError()  # index variable holds a value out of range of the Grid array
 # Below subroutine searches for patterns within a 5x5 grid (symbol entered being the center)
@@ -144,14 +140,14 @@ class Puzzle(): # Used to create puzzles from files stored with the program, or 
                 try:  # 3x3 grid check
                     PatternString = ""  # gets reset each time
                     PatternString += self.__GetCell(StartRow, StartColumn).GetSymbol()  # top left
-                    PatternString += self.__GetCell(StartRow, StartColumn + 1).GetSymbol()
+                    PatternString += self.__GetCell(StartRow, StartColumn + 1).GetSymbol()  # top mid
                     PatternString += self.__GetCell(StartRow, StartColumn + 2).GetSymbol()  # top right
-                    PatternString += self.__GetCell(StartRow - 1, StartColumn + 2).GetSymbol()
-                    PatternString += self.__GetCell(StartRow - 2, StartColumn + 2).GetSymbol() # bottom right
-                    PatternString += self.__GetCell(StartRow - 2, StartColumn + 1).GetSymbol()
-                    PatternString += self.__GetCell(StartRow - 2, StartColumn).GetSymbol() # bottom left
-                    PatternString += self.__GetCell(StartRow - 1, StartColumn).GetSymbol() # middle left
-                    PatternString += self.__GetCell(StartRow - 1, StartColumn + 1).GetSymbol() # center
+                    PatternString += self.__GetCell(StartRow - 1, StartColumn + 2).GetSymbol()  # mid right
+                    PatternString += self.__GetCell(StartRow - 2, StartColumn + 2).GetSymbol()  # bottom right
+                    PatternString += self.__GetCell(StartRow - 2, StartColumn + 1).GetSymbol()  # bottom mid
+                    PatternString += self.__GetCell(StartRow - 2, StartColumn).GetSymbol()  # bottom left
+                    PatternString += self.__GetCell(StartRow - 1, StartColumn).GetSymbol()  # middle left
+                    PatternString += self.__GetCell(StartRow - 1, StartColumn + 1).GetSymbol()  # center
                     for P in self.__AllowedPatterns: # P = Pattern
                         CurrentSymbol = self.__GetCell(Row, Column).GetSymbol()
                         if P.MatchesPattern(PatternString, CurrentSymbol): # TODO Hasnu: understand this and below
@@ -221,7 +217,7 @@ class Pattern():  # Used in __init__ for Puzzle()
 class Cell():  # Regular cells which are editable
     def __init__(self):
         self._Symbol = ""  # Initially empty
-        self.__SymbolsNotAllowed = []  # TODO Hasnu: double-check and see what this is used for
+        self.__SymbolsNotAllowed = []
 
     def GetSymbol(self):  # Returning symbol stored in the Cell() object
         if self.IsEmpty():
