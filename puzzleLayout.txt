@@ -1,0 +1,23 @@
+<Number of Symbols>
+<symbols>
+<Number of Patterns>
+<symbol>, <pattern>
+<GridSize>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Symbol>, <SymbolsNotAllowed>
+<Score>
+<SymbolsLeft>

@@ -1,0 +1,53 @@
+Questions that are worth it:
+
+create a new pattern (card made, solution coded) [ZigZag Q1]
+
+prevent pattern overlap usage for multiple pattern matches (card made)  [ZigZag Q2]
+
+fix pattern scanning/validation issue (card made) [ZigZag Q3]
+
+throw game file non-existent error (wikibooks isn't clear on how to do this, i need to innovate). This could make use of os module to determine if <puzzleName>.txt exists?
+
+save puzzle mid-game (card made) [ZigZag Q6]
+
+allow matching of rotated patterns (why in the hell would this be a thing???)
+
+add pattern limits (card made, solution coded) [ZigZag Q4]
+
+prevent symbolsleft decrementation upon invalid move [not sure, but no/low diff i think, just don't decrement symbolsleft if target cell is part of a pattern or a blocked cell]
+
+validate row/column entries [not sure, but very much no diff, just check if <= grid size]
+
+undo previous moves [ZigZag Q7]
+
+prevent symbol placement at invalid locations [basically prevent symbolsleft decrementation upon invalid move no??]
+
+wildcard (idk what implementation though, doublepoints or zeropoints or something else who knows)
+
+Shuffle blocked cell locations (card made) [ZigZag Q8]
+
+
+Final list:
+
+zigzag q2-8, q14, q17, prevent symbol placement at invalid locations, throw game file non existent, validate row/column entries
+
+
+Errors to fix:
+
+1. invalid symbol placements [overwriting cells in a pattern, placing cells in the pattern section whre they shouldn't be, placing in blocked cells] (leading to symbolsleft decreasing without a change occurring to the puzzle)
+2. Board scanning error (wrap-around error)
+3. Row/column entry validation
+4. File errors [invalid file name, cell in a pattern has no symbolsnotallowed list {puzzle1}, empty cell not in a pattern has a symbolsnotallowed list {puzzle4}]
+
+These could come up in question 13, which has 4 parts to it.
+
+Questions 11/12 are about 5 marks each, therefore low-diff/low-volume questions
+
+Question 14 has about 13 marks available, therefore it will be a difficult/high-volume question.
+
+Potential additional letters:
+
+C,D,E,F,G,H,I,J,K,L(5),O,P,U,V(5),W,Y,Z
+
+
+Extension Question I Like: 6 (adds convenience to game), 8 (makes game more interesting, similar to Q13 but looks easier imo), 9 (line bonus), 12 (diff scores for each pattern). One of these made use of Advanced Technique 4 (getting row/column from index position), but i cannot remember which one :(

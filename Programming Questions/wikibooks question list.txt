@@ -1,0 +1,20 @@
+Wikibooks:
+
+Symbol case check
+Throw game file non-existent error
+Remove a blocked cell in exchange for points
+Create a new pattern
+Save puzzle mid-game
+Allow matching of rotated patterns
+Game difficulties, to alter blocked cell amounts
+Prevent decrementation of symbols left when invalid move is made
+Create a puzzle file to be imported into directory
+Undo a move in exchange for points
+Valid row/column entries
+Fix getCell mapping issue (probably fixing the pattern validation issue)
+UpdateCell() unlocks a 3x3 grid grid if a pattern is broken, in exchange for points
+Place wildcard (*) cells in the grid 
+Replace already placed symbols
+User can create their own patterns
+Difficulty rating program (what???)
+Wildcard that completes a pattern (even if overriding a pattern)

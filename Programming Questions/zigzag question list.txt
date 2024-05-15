@@ -1,0 +1,56 @@
+ZigZag:
+
+Create a new pattern
+Prevent pattern overlap usage for multiple pattern matches
+Fix pattern validation issue where it reads out of grid
+Add pattern limits
+Remove a symbol
+Save puzzle mid-game
+Undo previous moves (unlimited amount)
+Shuffle blocked cell locations
+Create a double points cell
+Error handling to prevent symbol placement at invalid locations
+Ability to remove a blocked cell, after having made a valid pattern
+Create blocked cells on steroids
+Check if enough symbols left to place a pattern
+Find errors in external files
+Allow matching of rotated patterns
+Remove points if you ruin a pattern
+Create wildcards and fix error of ruining a pattern
+Find the highest possible score for legal patterns on a new grid (requires more code than typical exam scenario)
+
+1. New Pattern - No Diff: Just write a single line to instantiate a new pattern.
+
+2. Check if cell being used for a pattern is already in a pattern - No Diff: for each cell that's being scanned for the pattern, apply CheckSymbolAllowed() on each symbol. If true, return 0 points instead of 10.
+
+3. Fix wrap-around error in pattern scanning (scanning the board) - No diff: let each iteration run only if StartRow+2 and StartColumn+2 don't exceed the grid length.
+
+4. Pattern limits on standard puzzles only, decrement after each use and inform of counts remaining -Low/Low-Mid Diff: add *args to Puzzle to put random pattern limits for standard puzzles, add patterncount to Pattern to determine pattern count (-1 if non-applicable), OutputPatternCount method if limit exists, decrement after each use, award points only if pattern is available for use or pattern doesn't exist. 
+
+5. Option to remove symbol from grid + increment symbols left if not a blocked cell/in a pattern/blank & display symbols left - No Diff: give option to remove symbol, take row/column. If valid cell, remove symbol and increment symbolsleft. If not, give suitable error message.
+
+6. save puzzle - No/Low Diff: copy format of a puzzle.txt file, use same format/style off loadpuzzle. Make methods to get all symbols not allowed, pattern information. Save all information, use os module to create file in same directory as .py file.
+
+7. undo moves...{continue explanation}
+
+8. shuffle blocked cells around after successful pattern match - Low/Low-Mid Diff: I don't remember proper explanation but get all current locations and ensure new locations do not overlap with those. Ask after pattern match if shuffle should be done
+
+9. double points cell - No/Low Diff: create DoublePointsCell class that inherits from Cell, add isDouble() to make it true for doublepointscell. In patternmatch method check each scanned cell if double and return 20 if so.
+
+10. prevent placing symbol in any cell of cell in pattern for same cell, ensure valid grid location entry - No/Low Diff: include error handling for grid location entries, compare against symbolsnotallowed for symbol entries
+
+11. remove a blocked cell {one-time use} - Low/Low-Mid Diff: award ability if not available or used, give removal option. Remove blocked cell if possible, else inform user that invalid location was provided.
+
+12. create swamp (delayed blocked cells) - Mid Diff: warn user of a swamp occurring within 2-4 turns (25% chance of swamp event being triggered per turn), and just spread out new blocked cells that are represented by "!" (1-4 of them). Override UpdateCell in BlockedCell to change "@" to "!". Might be other things as well tbh but not too hard to figure out.
+
+13. check if enough symbols available for pattern placement, else deduct number of patterns left from score... need an explanation on this to make sure im understanding it. Is this truly aqa-level?
+
+14. check for errors and inform user of error detected in the text file. no need to say where (that's mean). Mid Diff: I'm assuming I need to load file and then do the fancy error checking crap. Error 1 arises if score is zero and a cell has a populated symbolsnotallowed list. error 2 arises if number of cells with a populated symolsnotallowed list is less than how many there should in relation to the score of the puzzle. If 10, should be 9. If 30, should be 27. If 100, should be 90.
+
+15. Match rotated patterns and give lower score. the hell?? why. - ??? Diff: idk how to explain this
+
+16. decrement score if user breaks a pattern - i guess if old symbol in symbolsnotallowed and new symbol being input, pattern is being broken so remove 10 points. [technically doesn't follow rules]
+
+17. create wildcard cells that can sub in for other symbols to create patterns. Question: do we replace wildcard symbol after pattern has been created with it?
+
+18. Find highest possible score. This is a very high code volume I do not give a damn about this question.
