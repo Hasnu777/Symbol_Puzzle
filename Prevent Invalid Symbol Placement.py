@@ -87,6 +87,7 @@ class Puzzle():
 		while not Finished:
 			self.DisplayPuzzle()
 			print("Current score: " + str(self.__Score))
+			print(f"Symbols Left: {self.__SymbolsLeft}")
 			Row = -1
 			Valid = False
 			while not Valid:
@@ -106,11 +107,16 @@ class Puzzle():
 			Symbol = self.__GetSymbolFromUser()
 			self.__SymbolsLeft -= 1
 			CurrentCell = self.__GetCell(Row, Column)
-			if CurrentCell.CheckSymbolAllowed(Symbol):
+			# START CHANGE
+			if CurrentCell.CheckSymbolAllowed(Symbol) and CurrentCell.CheckSymbolAllowed(CurrentCell.GetSymbol()):
 				CurrentCell.ChangeSymbolInCell(Symbol)
 				AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
 				if AmountToAddToScore > 0:
 					self.__Score += AmountToAddToScore
+			else:
+				self.__SymbolsLeft += 1
+				print("Invalid location selected. Try again.")
+			# END CHANGE
 			if self.__SymbolsLeft == 0:
 				Finished = True
 		print()

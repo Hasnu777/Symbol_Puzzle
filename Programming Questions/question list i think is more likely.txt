@@ -35,19 +35,35 @@ zigzag q2-8, q14, q17, prevent symbol placement at invalid locations, throw game
 Errors to fix:
 
 1. invalid symbol placements [overwriting cells in a pattern, placing cells in the pattern section whre they shouldn't be, placing in blocked cells] (leading to symbolsleft decreasing without a change occurring to the puzzle)
+Solved
 2. Board scanning error (wrap-around error)
+Solved in Q3
 3. Row/column entry validation
+Solved
 4. File errors [invalid file name, cell in a pattern has no symbolsnotallowed list {puzzle1}, empty cell not in a pattern has a symbolsnotallowed list {puzzle4}]
+Solved, Solved Q14, Solved Q14
+Bonus: not allowed to overlap patterns of the same symbol [Solved Q2]
 
 These could come up in question 13, which has 4 parts to it.
 
 Questions 11/12 are about 5 marks each, therefore low-diff/low-volume questions
+Easy: Q1 (way too easy), Q2 (mid-volume, reg easy), Q3 (way too easy), Q5 (reg easy)
+Between: Q8 (can be easy, but easy to forget smth small), Q14 (can be easy, but easy to forget smth small)
+Semi/Mid-Diff: Q6 (semi), Q7 (long + mid-diff, I did add my own extra code though...)
+High Potential: Q4 (*args fanciness & 7 changes that are mid/high-volume), Q6 (os module usage)
 
 Question 14 has about 13 marks available, therefore it will be a difficult/high-volume question.
+My Wildcard was high volume and slightly difficult ngl, Q17 has 7 changes
 
 Potential additional letters:
 
 C,D,E,F,G,H,I,J,K,L(5),O,P,U,V(5),W,Y,Z
 
 
-Extension Question I Like: 6 (adds convenience to game), 8 (makes game more interesting, similar to Q13 but looks easier imo), 9 (line bonus), 12 (diff scores for each pattern). One of these made use of Advanced Technique 4 (getting row/column from index position), but i cannot remember which one :(
+Extension Question I Like:
+6 (adds convenience to game) [Seems a bit hard to implement but it is interesting, I may look into it if I feel like it]
+8 (makes game more interesting, similar to Q13 but looks easier imo) [Seems REALLY easy: iterate through grid and count num of times "-" is returned, self.__Score - 2 * that number]
+9 (line bonus) [Add line bonus var made from random number and to see if vert or horizontal, in checkformatchwithpattern check if pattern matched and then check if line bonus var falls in range of 3x3 grid]
+12 (diff scores for each pattern) [Easy: add score var to Pattern class, return that score instead of 10]
+
+One of these made use of Advanced Technique 4 (getting row/column from index position), but i cannot remember which one :(

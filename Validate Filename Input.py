@@ -12,8 +12,10 @@ def Main():
 	Score = 0
 	while Again == "y":
 		Filename = input("Press Enter to start a standard puzzle or enter name of file to load: ")
-		if len(Filename) > 0:
+		# START CHANGE
+		if os.path.isfile(f"{Filename}.txt"):
 			MyPuzzle = Puzzle(Filename + ".txt")
+		# END CHANGE
 		else:
 			MyPuzzle = Puzzle(8, int(8 * 8 * 0.6))
 		Score = MyPuzzle.AttemptPuzzle()

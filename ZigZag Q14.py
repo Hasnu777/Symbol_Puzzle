@@ -79,8 +79,30 @@ class Puzzle():
 						self.__Grid.append(C)
 				self.__Score = int(f.readline().rstrip())
 				self.__SymbolsLeft = int(f.readline().rstrip())
+				# START CHANGE
+				self.TestForError1()
+				self.TestForError2()
+				# END CHANGE
 		except:
 			print("Puzzle not loaded")
+
+	# START CHANGE
+	def TestForError1(self):
+		Error1Found = False
+		for C in self.__Grid:
+			if C.ContainsSymbolsNotAllowedList() and C.GetSymbol() != "@":
+				Error1Found = True
+		if Error1Found and self.__Score == 0:
+			print("There appear to be cells in the file which demonstrate error 1.")
+
+	def TestForError2(self):
+		Counter = 0
+		for C in self.__Grid:
+			if C.ContainsSymbolsNotAllowedList():
+				Counter += 1
+		if (self.__Score / 10) * 9 > Counter:
+			print("There appear to be cells in the file which demonstrate error 2.")
+	# END CHANGE
 
 	def AttemptPuzzle(self):
 		Finished = False
@@ -233,6 +255,16 @@ class Cell():
 
 	def AddToNotAllowedSymbols(self, SymbolToAdd):
 		self.__SymbolsNotAllowed.append(SymbolToAdd)
+
+	# START CHANGE
+	def ContainsSymbolsNotAllowedList(self):
+		if self._Symbol == "@":
+			return True
+		if len(self.__SymbolsNotAllowed) > 0 and "" not in self.__SymbolsNotAllowed:
+			return True
+		else:
+			return False
+	# END CHANGE
 
 	def UpdateCell(self):
 		pass

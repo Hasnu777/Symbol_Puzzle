@@ -118,7 +118,7 @@ class Puzzle():
 						self.__Score += AmountToAddToScore
 				if self.__SymbolsLeft == 0:
 					Finished = True
-			else:
+			else:  # CHANGE IN QUESTION
 				CurrentCell = self.__GetCell(Row, Column)
 				ValidCell = True
 				for letter in ("Q", "X", "T"):

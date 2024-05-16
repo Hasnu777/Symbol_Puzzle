@@ -82,6 +82,22 @@ class Puzzle():
 		except:
 			print("Puzzle not loaded")
 
+	# START CHANGE
+	def __ReShuffleBlockedCells(self):
+		BlockedCellCount = 0
+		BlockedCellLocations = []
+		for i in range(self.__GridSize ** 2):
+			if self.__Grid[i].GetSymbol() == "@":
+				BlockedCellCount += 1
+				BlockedCellLocations.append(i)
+				self.__Grid[i] = Cell()
+		while BlockedCellCount > 0:
+			NewLocation = random.randint(0, self.__GridSize ** 2)
+			if NewLocation not in BlockedCellLocations and self.__Grid[NewLocation].GetSymbol() == "-":
+				self.__Grid[NewLocation] = BlockedCell()
+				BlockedCellCount -= 1
+	# END CHANGE
+
 	def AttemptPuzzle(self):
 		Finished = False
 		while not Finished:
@@ -111,6 +127,11 @@ class Puzzle():
 				AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
 				if AmountToAddToScore > 0:
 					self.__Score += AmountToAddToScore
+					# START CHANGE
+					ShuffleBlockedCells = input("Pattern created. Would you like to shuffle the blocked cells? (Y/N) ").upper() == "Y"
+					if ShuffleBlockedCells:
+						self.__ReShuffleBlockedCells()
+					# END CHANGE
 			if self.__SymbolsLeft == 0:
 				Finished = True
 		print()

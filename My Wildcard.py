@@ -23,9 +23,6 @@ def Main():
 
 class Puzzle():
 	def __init__(self, *args):
-		# START CHANGE
-		self.__PreviousMoves = []
-		# END CHANGE
 		if len(args) == 1:
 			self.__Score = 0
 			self.__SymbolsLeft = 0
@@ -40,10 +37,15 @@ class Puzzle():
 			self.__GridSize = args[0]
 			self.__Grid = []
 			for Count in range(1, self.__GridSize * self.__GridSize + 1):
-				if random.randrange(1, 101) < 90:
+				# START CHANGE
+				Number = random.randrange(1, 101)
+				if Number < 85:
 					C = Cell()
+				elif 85 <= Number < 90:
+					C = WildcardCell()
 				else:
 					C = BlockedCell()
+				# END CHANGE
 				self.__Grid.append(C)
 			self.__AllowedPatterns = []
 			self.__AllowedSymbols = []
@@ -85,92 +87,37 @@ class Puzzle():
 		except:
 			print("Puzzle not loaded")
 
-	# START CHANGE
-	def __UndoMove(self):
-		OldCell = self.__PreviousMoves.pop()
-		Row = OldCell.GetRow()
-		Column = OldCell.GetColumn()
-		CurrentCell = self.__GetCell(Row, Column)
-		if not CurrentCell.CheckSymbolAllowed(CurrentCell.GetSymbol()):
-			self.__Score -= 10
-			print("A pattern has been un-made. Score has been updated accordingly.")
-			for StartRow in range(Row + 2, Row - 1, -1):
-				for StartColumn in range(Column - 2, Column + 1):
-					if 0 <= StartRow <= self.__GridSize and 0 <= StartColumn <= self.__GridSize:
-						try:
-							PatternString = ""
-							PatternString += self.__GetCell(StartRow, StartColumn).GetSymbol()
-							PatternString += self.__GetCell(StartRow, StartColumn + 1).GetSymbol()
-							PatternString += self.__GetCell(StartRow, StartColumn + 2).GetSymbol()
-							PatternString += self.__GetCell(StartRow - 1, StartColumn + 2).GetSymbol()
-							PatternString += self.__GetCell(StartRow - 2, StartColumn + 2).GetSymbol()
-							PatternString += self.__GetCell(StartRow - 2, StartColumn + 1).GetSymbol()
-							PatternString += self.__GetCell(StartRow - 2, StartColumn).GetSymbol()
-							PatternString += self.__GetCell(StartRow - 1, StartColumn).GetSymbol()
-							PatternString += self.__GetCell(StartRow - 1, StartColumn + 1).GetSymbol()
-							for P in self.__AllowedPatterns:
-								CurrentSymbol = self.__GetCell(Row, Column).GetSymbol()
-								if P.MatchesPattern(PatternString, CurrentSymbol):
-									self.__GetCell(StartRow, StartColumn).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow, StartColumn + 1).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow, StartColumn + 2).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow - 1, StartColumn + 2).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow - 2, StartColumn + 2).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow - 2, StartColumn + 1).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow - 2, StartColumn).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow - 1, StartColumn).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-									self.__GetCell(StartRow - 1, StartColumn + 1).GetSymbolsNotAllowed().remove(CurrentCell.GetSymbol())
-						except:
-							pass
-		CurrentCell.ChangeSymbolInCell(OldCell.GetSymbol())
-		CurrentCell.ChangeSymbolsNotAllowed(OldCell.GetSymbolsNotAllowed())
-
-		self.__SymbolsLeft += 1
-	# END CHANGE
-
 	def AttemptPuzzle(self):
 		Finished = False
 		while not Finished:
 			self.DisplayPuzzle()
 			print("Current score: " + str(self.__Score))
-			# START CHANGE
-			UndoMove = input("Would you like to undo a move? (Y/N) ").upper() == "Y"
-			if UndoMove:
-				if len(self.__PreviousMoves) > 0:
-					self.__UndoMove()
-				else:
-					print("No moves available to undo.")
-			else:
-				Row = -1
-				Valid = False
-				while not Valid:
-					try:
-						Row = int(input("Enter row number: "))
-						Valid = True
-					except:
-						pass
-				Column = -1
-				Valid = False
-				while not Valid:
-					try:
-						Column = int(input("Enter column number: "))
-						Valid = True
-					except:
-						pass
-				Symbol = self.__GetSymbolFromUser()
-				self.__SymbolsLeft -= 1
-				CurrentCell = self.__GetCell(Row, Column)
-				if CurrentCell.CheckSymbolAllowed(Symbol):
-					# START CHANGE
-					self.__PreviousMoves.append(PreviousMove(Row, Column, CurrentCell))
-					# END CHANGE
-					CurrentCell.ChangeSymbolInCell(Symbol)
-					AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
-					if AmountToAddToScore > 0:
-						self.__Score += AmountToAddToScore
-				if self.__SymbolsLeft == 0:
-					Finished = True
-			# END CHANGE
+			Row = -1
+			Valid = False
+			while not Valid:
+				try:
+					Row = int(input("Enter row number: "))
+					Valid = True
+				except:
+					pass
+			Column = -1
+			Valid = False
+			while not Valid:
+				try:
+					Column = int(input("Enter column number: "))
+					Valid = True
+				except:
+					pass
+			Symbol = self.__GetSymbolFromUser()
+			self.__SymbolsLeft -= 1
+			CurrentCell = self.__GetCell(Row, Column)
+			if CurrentCell.CheckSymbolAllowed(Symbol):
+				CurrentCell.ChangeSymbolInCell(Symbol)
+				AmountToAddToScore = self.CheckforMatchWithPattern(Row, Column)
+				if AmountToAddToScore > 0:
+					self.__Score += AmountToAddToScore
+			if self.__SymbolsLeft == 0:
+				Finished = True
 		print()
 		self.DisplayPuzzle()
 		print()
@@ -187,29 +134,53 @@ class Puzzle():
 		for StartRow in range(Row + 2, Row - 1, -1):
 			for StartColumn in range(Column - 2, Column + 1):
 				try:
+					# START CHANGE
+					WildcardCount = 0
+					PatternCells = []
+					PatternCells.append(self.__GetCell(StartRow, StartColumn))
+					PatternCells.append(self.__GetCell(StartRow, StartColumn + 1))
+					PatternCells.append(self.__GetCell(StartRow, StartColumn + 2))
+					PatternCells.append(self.__GetCell(StartRow - 1, StartColumn + 2))
+					PatternCells.append(self.__GetCell(StartRow - 2, StartColumn + 2))
+					PatternCells.append(self.__GetCell(StartRow - 2, StartColumn + 1))
+					PatternCells.append(self.__GetCell(StartRow - 2, StartColumn))
+					PatternCells.append(self.__GetCell(StartRow - 1, StartColumn))
+					PatternCells.append(self.__GetCell(StartRow - 1, StartColumn + 1))
 					PatternString = ""
-					PatternString += self.__GetCell(StartRow, StartColumn).GetSymbol()
-					PatternString += self.__GetCell(StartRow, StartColumn + 1).GetSymbol()
-					PatternString += self.__GetCell(StartRow, StartColumn + 2).GetSymbol()
-					PatternString += self.__GetCell(StartRow - 1, StartColumn + 2).GetSymbol()
-					PatternString += self.__GetCell(StartRow - 2, StartColumn + 2).GetSymbol()
-					PatternString += self.__GetCell(StartRow - 2, StartColumn + 1).GetSymbol()
-					PatternString += self.__GetCell(StartRow - 2, StartColumn).GetSymbol()
-					PatternString += self.__GetCell(StartRow - 1, StartColumn).GetSymbol()
-					PatternString += self.__GetCell(StartRow - 1, StartColumn + 1).GetSymbol()
+					for C in PatternCells:
+						if C.GetSymbol() == "*":
+							if not C.IsWild():
+								PatternString += "-"
+							else:
+								PatternString += "*"
+						else:
+							PatternString += C.GetSymbol()
+					for C in PatternCells:
+						if C.GetSymbol() == "*":
+							WildcardCount += 1
 					for P in self.__AllowedPatterns:
 						CurrentSymbol = self.__GetCell(Row, Column).GetSymbol()
 						if P.MatchesPattern(PatternString, CurrentSymbol):
 							self.__GetCell(StartRow, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow, StartColumn).UpdateCell()
 							self.__GetCell(StartRow, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow, StartColumn + 1).UpdateCell()
 							self.__GetCell(StartRow, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow, StartColumn + 2).UpdateCell()
 							self.__GetCell(StartRow - 1, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow - 1, StartColumn + 2).UpdateCell()
 							self.__GetCell(StartRow - 2, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow - 2, StartColumn + 2).UpdateCell()
 							self.__GetCell(StartRow - 2, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow - 2, StartColumn + 1).UpdateCell()
 							self.__GetCell(StartRow - 2, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow - 2, StartColumn).UpdateCell()
 							self.__GetCell(StartRow - 1, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
+							self.__GetCell(StartRow - 1, StartColumn).UpdateCell()
 							self.__GetCell(StartRow - 1, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
-							return 10
+							self.__GetCell(StartRow - 1, StartColumn + 1).UpdateCell()
+							return 10 - 2 * WildcardCount
+					# END CHANGE
 				except:
 					pass
 		return 0
@@ -253,8 +224,10 @@ class Pattern():
 			return False
 		for Count in range(0, len(self.__PatternSequence)):
 			try:
-				if self.__PatternSequence[Count] == self.__Symbol and PatternString[Count] != self.__Symbol:
+				# START CHANGE
+				if self.__PatternSequence[Count] == self.__Symbol and PatternString[Count] not in (self.__Symbol, "*"):
 					return False
+				# END CHANGE
 			except Exception as ex:
 				print(f"EXCEPTION in MatchesPattern: {ex}")
 		return True
@@ -292,14 +265,6 @@ class Cell():
 	def AddToNotAllowedSymbols(self, SymbolToAdd):
 		self.__SymbolsNotAllowed.append(SymbolToAdd)
 
-	# START CHANGE
-	def GetSymbolsNotAllowed(self):
-		return self.__SymbolsNotAllowed
-
-	def ChangeSymbolsNotAllowed(self, SymbolsNotAllowed):
-		self.__SymbolsNotAllowed = SymbolsNotAllowed
-	# END CHANGE
-
 	def UpdateCell(self):
 		pass
 
@@ -314,19 +279,20 @@ class BlockedCell(Cell):
 
 
 # START CHANGE
-class PreviousMove(Cell):
-	def __init__(self, Row, Column, OldCell):
-		super(PreviousMove, self).__init__()
-		self.__Row = Row
-		self.__Column = Column
-		self._Symbol = OldCell.GetSymbol()
-		self.__SymbolsNotAllowed = OldCell.GetSymbolsNotAllowed()
+class WildcardCell(Cell):
+	def __init__(self):
+		super(WildcardCell, self).__init__()
+		self._Symbol = "*"
+		self._IsWild = True
 
-	def GetRow(self):
-		return self.__Row
+	def IsWild(self):
+		return self._IsWild
 
-	def GetColumn(self):
-		return self.__Column
+	def CheckSymbolAllowed(self, SymbolToCheck):
+		return False
+
+	def UpdateCell(self):
+		self._IsWild = False
 # END CHANGE
 
 

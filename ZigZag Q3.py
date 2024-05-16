@@ -129,7 +129,7 @@ class Puzzle():
 		for StartRow in range(Row + 2, Row - 1, -1):
 			for StartColumn in range(Column - 2, Column + 1):
 				# START CHANGE
-				if StartColumn + 2 <= self.__GridSize and StartRow + 2 <= self.__GridSize:
+				if StartColumn + 2 <= self.__GridSize and StartRow + 2 <= self.__GridSize:  # CHANGE IN QUESTION
 					try:
 						PatternString = ""
 						PatternString += self.__GetCell(StartRow, StartColumn).GetSymbol()
