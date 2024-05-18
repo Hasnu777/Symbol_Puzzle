@@ -100,7 +100,10 @@ class Puzzle():
 		for C in self.__Grid:
 			if C.ContainsSymbolsNotAllowedList():
 				Counter += 1
+		print(Counter)
+		print(self.__Score / 10 * 9)
 		if (self.__Score / 10) * 9 > Counter:
+
 			print("There appear to be cells in the file which demonstrate error 2.")
 	# END CHANGE
 

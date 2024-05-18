@@ -54,7 +54,7 @@ class Puzzle():
 			TPattern = Pattern("T", "TTT**T**T", random.randint(1,3))
 			self.__AllowedPatterns.append(TPattern)
 			self.__AllowedSymbols.append("T")
-			# 4.2 END CHANGE
+			# 4.1 END CHANGE
 
 	def __LoadPuzzle(self, Filename):
 		try:
@@ -203,11 +203,11 @@ class Pattern():
 			self.PatternCount = args[0]
 		else:
 			self.PatternCount = -1
-	# 4.2 START CHANGE
+	# 4.2 END CHANGE
 
 	def MatchesPattern(self, PatternString, SymbolPlaced):
 		# 4.2 START CHANGE
-		if SymbolPlaced != self.__Symbol and self.PatternCount == 0:
+		if SymbolPlaced != self.__Symbol or self.PatternCount == 0:
 			return False
 		# 4.2 END CHANGE
 		for Count in range(0, len(self.__PatternSequence)):

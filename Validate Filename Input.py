@@ -13,6 +13,10 @@ def Main():
 	while Again == "y":
 		Filename = input("Press Enter to start a standard puzzle or enter name of file to load: ")
 		# START CHANGE
+		"""
+		__filename__ <- file being passed into
+		directory
+		"""
 		if os.path.isfile(f"{Filename}.txt"):
 			MyPuzzle = Puzzle(Filename + ".txt")
 		# END CHANGE

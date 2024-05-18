@@ -96,7 +96,7 @@ class Puzzle():
 			print("A pattern has been un-made. Score has been updated accordingly.")
 			for StartRow in range(Row + 2, Row - 1, -1):
 				for StartColumn in range(Column - 2, Column + 1):
-					if 0 <= StartRow <= self.__GridSize and 0 <= StartColumn <= self.__GridSize:
+					if 2 < StartColumn + 2 <= self.__GridSize:
 						try:
 							PatternString = ""
 							PatternString += self.__GetCell(StartRow, StartColumn).GetSymbol()
@@ -124,7 +124,6 @@ class Puzzle():
 							pass
 		CurrentCell.ChangeSymbolInCell(OldCell.GetSymbol())
 		CurrentCell.ChangeSymbolsNotAllowed(OldCell.GetSymbolsNotAllowed())
-
 		self.__SymbolsLeft += 1
 	# END CHANGE
 

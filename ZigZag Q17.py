@@ -24,7 +24,7 @@ def Main():
 class Puzzle():
     def __init__(self, *args):
         # START CHANGE
-        self.__WildCardCount = 2
+        self.__WildCardsLeft = 2
         # END CHANGE
         if len(args) == 1:
             self.__Score = 0
@@ -91,9 +91,8 @@ class Puzzle():
             self.DisplayPuzzle()
             print("Current score: " + str(self.__Score))
             # START CHANGE
-            print(
-                "Wild cards will allow two symbols to be placed on top of each other and still be matched for each pattern.")
-            print("You currently have " + str(self.__WildCardCount) + " wild cards left.")
+            print("Wild cards will allow two symbols to be placed on top of each other and still be matched for each pattern.")
+            print("You currently have " + str(self.__WildCardsLeft) + " wild cards left.")
             # END CHANGE
             Row = -1
             Valid = False
@@ -117,9 +116,9 @@ class Puzzle():
             if CurrentCell.CheckSymbolAllowed(Symbol):
                 # START CHANGE
                 if not CurrentCell.IsEmpty() and CurrentCell.GetSymbol() != "@":
-                    if self.__WildCardCount > 0:
+                    if self.__WildCardsLeft > 0:
                         self.__Grid[(self.__GridSize - Row) * self.__GridSize + Column - 1] = WildCardCell()
-                        self.__WildCardCount -= 1
+                        self.__WildCardsLeft -= 1
                     else:
                         print("You have used both your wildcards for this puzzle.")
                         continue
@@ -162,27 +161,27 @@ class Puzzle():
                         PatternCells.append(self.__GetCell(StartRow - 1, StartColumn + 1))
                         WildCardInPattern = False
                         for C in PatternCells:
-                            if (C.IsWild()):
+                            if C.IsWild():
                                 WildCardInPattern = True
-                        PatternString += C.GetSymbol()
-                        if (WildCardInPattern):
+                            PatternString += C.GetSymbol()
+                        if WildCardInPattern:
                             PatternString = PatternString.replace("W", P.GetPatternSymbol())
                         CurrentSymbol = self.__GetCell(Row, Column).GetSymbol()
                         if P.MatchesPattern(PatternString, CurrentSymbol):
                             self.__GetCell(StartRow, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow - 1, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow - 2, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow - 2, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow - 2, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow - 1, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
-                        self.__GetCell(StartRow - 1, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
-                        if (WildCardInPattern):
-                            return 15
-                        else:
-                            return 10
-                    # END CHANGE
+                            self.__GetCell(StartRow, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
+                            self.__GetCell(StartRow, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
+                            self.__GetCell(StartRow - 1, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
+                            self.__GetCell(StartRow - 2, StartColumn + 2).AddToNotAllowedSymbols(CurrentSymbol)
+                            self.__GetCell(StartRow - 2, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
+                            self.__GetCell(StartRow - 2, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
+                            self.__GetCell(StartRow - 1, StartColumn).AddToNotAllowedSymbols(CurrentSymbol)
+                            self.__GetCell(StartRow - 1, StartColumn + 1).AddToNotAllowedSymbols(CurrentSymbol)
+                            if WildCardInPattern:
+                                return 15
+                            else:
+                                return 10
+                # END CHANGE
                 except:
                     pass
         return 0
@@ -270,13 +269,13 @@ class Cell():
     def AddToNotAllowedSymbols(self, SymbolToAdd):
         self.__SymbolsNotAllowed.append(SymbolToAdd)
 
+    def UpdateCell(self):
+        pass
+
     # START CHANGE
     def IsWild(self):
         return False
     # END CHANGE
-
-    def UpdateCell(self):
-        pass
 
 
 class BlockedCell(Cell):

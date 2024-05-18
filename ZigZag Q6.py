@@ -85,6 +85,13 @@ class Puzzle():
 	# START CHANGE
 	def SavePuzzle(self):
 		filename = input("Enter name of file you want to save the puzzle to: ")
+		"""
+		"D:/School Files/.../Symbol_Puzzle/filename.txt" os.path.join() "path_1" to file
+		"D:/School Files/.../Symbol_Puzzle" os.path.dirname(file) name of the directory where the file is stored.
+		__file__ -> the name of the file itself "ZigZag Q6.py" 
+		f = open(file_path_name)
+		f.close()
+		"""
 		with open(os.path.join(os.path.dirname(__file__), f"{filename}.txt"), 'w') as f:
 			f.write(f"{len(self.__AllowedSymbols)}\n")
 			for symbol in self.__AllowedSymbols:

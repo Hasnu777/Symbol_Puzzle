@@ -139,7 +139,7 @@ class Puzzle():
 									self.__GetCell(StartRow - 1, StartColumn),
 									self.__GetCell(StartRow - 1, StartColumn + 1)]
 					for cell in PatternCells:
-						for letter in ("Q", "X", "T"):
+						for letter in self.__AllowedSymbols:
 							if not cell.CheckSymbolAllowed(letter) and cell.GetSymbol() != "@":
 								print("Error: cannot overlap patterns of the same symbol.")
 								return 0

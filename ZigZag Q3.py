@@ -129,7 +129,8 @@ class Puzzle():
 		for StartRow in range(Row + 2, Row - 1, -1):
 			for StartColumn in range(Column - 2, Column + 1):
 				# START CHANGE
-				if StartColumn + 2 <= self.__GridSize and StartRow + 2 <= self.__GridSize:  # CHANGE IN QUESTION
+				if 2 < StartColumn + 2 <= self.__GridSize:  # CHANGE IN QUESTION
+					print('hehe we bypassed the if condition moron')
 					try:
 						PatternString = ""
 						PatternString += self.__GetCell(StartRow, StartColumn).GetSymbol()
@@ -157,7 +158,7 @@ class Puzzle():
 					except:
 						pass
 				else:
-					continue
+					break
 				# END CHANGE
 		return 0
 

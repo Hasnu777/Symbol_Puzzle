@@ -88,6 +88,7 @@ class Puzzle():
 			self.DisplayPuzzle()
 			print("Current score: " + str(self.__Score))
 			# START CHANGE
+			print(f"Symbols Left: {self.__SymbolsLeft}")
 			RemoveCell = input("Would you like to remove a symbol from the puzzle? (Y/N) ").upper() == "Y"
 			# END CHANGE
 			Row = -1
@@ -120,9 +121,7 @@ class Puzzle():
 					Finished = True
 			else:  # CHANGE IN QUESTION
 				CurrentCell = self.__GetCell(Row, Column)
-				ValidCell = True
-				for letter in ("Q", "X", "T"):
-					ValidCell = bool(CurrentCell.CheckSymbolAllowed(letter) and CurrentCell.GetSymbol() != "-")
+				ValidCell = CurrentCell.CheckSymbolAllowed(CurrentCell.GetSymbol()) and CurrentCell.GetSymbol() != "-"
 				if ValidCell:
 					CurrentCell.ChangeSymbolInCell('')
 					self.__SymbolsLeft += 1
