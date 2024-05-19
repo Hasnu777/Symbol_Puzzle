@@ -139,10 +139,9 @@ class Puzzle():
 									self.__GetCell(StartRow - 1, StartColumn),
 									self.__GetCell(StartRow - 1, StartColumn + 1)]
 					for cell in PatternCells:
-						for letter in self.__AllowedSymbols:
-							if not cell.CheckSymbolAllowed(letter) and cell.GetSymbol() != "@":
-								print("Error: cannot overlap patterns of the same symbol.")
-								return 0
+						if not cell.CheckSymbolAllowed(cell.GetSymbol()) and cell.GetSymbol() == self.__GetCell(StartRow, StartColumn).GetSymbol():
+							print("error: cannot overlap patterns of the same symbol.")
+							return 0
 					# END CHANGE
 					PatternString = ""
 					PatternString += self.__GetCell(StartRow, StartColumn).GetSymbol()
